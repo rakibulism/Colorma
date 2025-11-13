@@ -18,6 +18,7 @@ interface ShareButtonProps {
   primaryColor: string;
   secondaryColor: string;
   accentColor: string;
+  theme?: string;
 }
 
 export function ShareButton({
@@ -26,6 +27,7 @@ export function ShareButton({
   primaryColor,
   secondaryColor,
   accentColor,
+  theme = 'light',
 }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
@@ -37,6 +39,7 @@ export function ShareButton({
       primary: primaryColor,
       secondary: secondaryColor,
       accent: accentColor,
+      theme: theme,
     });
     
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`;

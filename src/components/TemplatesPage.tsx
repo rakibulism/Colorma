@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Search, ChevronRight, Command } from 'lucide-react';
+import { Search, ChevronRight, Command, Filter, X } from 'lucide-react';
 import { Badge } from './ui/badge';
 import exampleImage from 'figma:asset/d86249799e24733340f94f65a56d585f68e01625.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -29,6 +29,7 @@ export function TemplatesPage({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeItem, setActiveItem] = useState('Welcome');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     'Get Started': true,
     'Color Tools': true,
@@ -79,10 +80,10 @@ export function TemplatesPage({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor }}>
-      {/* Sidebar */}
+    <div className="flex h-screen overflow-hidden relative" style={{ backgroundColor }}>
+      {/* Desktop Sidebar */}
       <aside
-        className="w-60 border-r overflow-y-auto"
+        className="hidden md:block w-60 border-r overflow-y-auto"
         style={{
           backgroundColor,
           borderColor: secondaryColor,
@@ -139,6 +140,117 @@ export function TemplatesPage({
           ))}
         </div>
       </aside>
+
+      {/* Mobile Navigation Button */}
+      <button
+        className="md:hidden fixed bottom-24 right-4 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
+        onClick={() => setMobileNavOpen(true)}
+        style={{
+          backgroundColor: accentColor,
+          color: backgroundColor,
+        }}
+      >
+        <Filter className="w-5 h-5" />
+      </button>
+
+      {/* Mobile Navigation Drawer */}
+      {mobileNavOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setMobileNavOpen(false)}
+          />
+          
+          {/* Drawer */}
+          <div
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 max-h-[80vh] overflow-y-auto rounded-t-xl shadow-2xl"
+            style={{
+              backgroundColor,
+              borderTop: `1px solid ${secondaryColor}`,
+            }}
+          >
+            {/* Drawer Header */}
+            <div
+              className="sticky top-0 flex items-center justify-between p-4 border-b"
+              style={{
+                backgroundColor,
+                borderColor: secondaryColor,
+              }}
+            >
+              <h3 style={{ color: textColor, margin: 0 }}>Navigation</h3>
+              <button
+                onClick={() => setMobileNavOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 'var(--spacing-2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <X className="w-5 h-5" style={{ color: textColor }} />
+              </button>
+            </div>
+
+            {/* Drawer Content */}
+            <div className="p-4 space-y-6">
+              {sidebarSections.map((section) => (
+                <div key={section.title}>
+                  <button
+                    onClick={() => toggleSection(section.title)}
+                    className="flex items-center justify-between w-full mb-2"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      color: textColor,
+                      opacity: 0.6,
+                      fontSize: 'var(--font-size-xs)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {section.title}
+                    <ChevronRight
+                      className="w-3 h-3 transition-transform"
+                      style={{
+                        transform: expandedSections[section.title] ? 'rotate(90deg)' : 'rotate(0deg)',
+                      }}
+                    />
+                  </button>
+                  {expandedSections[section.title] && (
+                    <ul className="space-y-1">
+                      {section.items.map((item) => (
+                        <li key={item}>
+                          <button
+                            onClick={() => {
+                              setActiveItem(item);
+                              setMobileNavOpen(false);
+                            }}
+                            className="w-full text-left px-3 py-2 rounded transition-colors"
+                            style={{
+                              background: activeItem === item ? secondaryColor : 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              color: activeItem === item ? primaryColor : textColor,
+                              fontSize: 'var(--font-size-sm)',
+                            }}
+                          >
+                            {item}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">

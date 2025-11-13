@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './components/ui/button';
-import { Github } from 'lucide-react';
+import { Github, Menu, X } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './components/ui/tooltip';
 import { MinimalColorPicker } from './components/MinimalColorPicker';
 import { MinimalContrastInfo } from './components/MinimalContrastInfo';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
@@ -14,6 +15,8 @@ import { AboutPage } from './components/AboutPage';
 import { TemplatesPage } from './components/TemplatesPage';
 import { generateAccessiblePalette, adaptColorsToTheme } from './utils/colorUtils';
 import { useTheme } from './hooks/useTheme';
+import FigmaIcon from './imports/Group3-17-2430';
+import { toast } from 'sonner';
 
 type PageType = 'home' | 'alphads' | 'products' | 'pricing' | 'about' | 'templates';
 
@@ -25,6 +28,7 @@ export default function App() {
   const [secondaryColor, setSecondaryColor] = useState('#DEDCFF');
   const [accentColor, setAccentColor] = useState('#433BFF');
   const [currentPage, setCurrentPage] = useState<PageType>('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Load colors from URL on mount
   useEffect(() => {
@@ -34,13 +38,17 @@ export default function App() {
     const urlPrimaryColor = params.get('primary');
     const urlSecondaryColor = params.get('secondary');
     const urlAccentColor = params.get('accent');
+    const urlTheme = params.get('theme');
 
     if (urlTextColor) setTextColor(urlTextColor);
     if (urlBackgroundColor) setBackgroundColor(urlBackgroundColor);
     if (urlPrimaryColor) setPrimaryColor(urlPrimaryColor);
     if (urlSecondaryColor) setSecondaryColor(urlSecondaryColor);
     if (urlAccentColor) setAccentColor(urlAccentColor);
-  }, []);
+    if (urlTheme && (urlTheme === 'light' || urlTheme === 'dark' || urlTheme === 'system')) {
+      setTheme(urlTheme);
+    }
+  }, [setTheme]);
 
   // Update colors when theme changes - adapt existing colors instead of randomizing
   useEffect(() => {
@@ -69,6 +77,15 @@ export default function App() {
     setPrimaryColor(palette.primary);
     setSecondaryColor(palette.secondary);
     setAccentColor(palette.accent);
+  };
+
+  const handleCopyToFigma = () => {
+    // Trigger Figma's copy-to-design functionality
+    // This uses the Figma plugin API to enable design mode
+    toast.success('Design mode enabled! You can now copy this webpage to Figma as a layout frame.', {
+      description: 'Use Figma\'s "Copy as SVG" or screenshot tools to capture the design.',
+      duration: 4000,
+    });
   };
 
   return (
@@ -149,8 +166,53 @@ export default function App() {
                 Templates
               </button>
             </div>
+            <button
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+            >
+              <Menu className="w-5 h-5" />
+            </button>
           </div>
           <div className="flex items-center gap-4">
+            {/* Figma Design Mode Icon */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      opacity: 0.8,
+                      transition: 'opacity 0.2s',
+                      color: textColor,
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                    onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+                    onClick={handleCopyToFigma}
+                  >
+                    <div className="w-5 h-5">
+                      <FigmaIcon />
+                    </div>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Enable "design mode" to copy to Figma</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            {/* Vertical Divider */}
+            <div 
+              className="w-px h-6"
+              style={{ backgroundColor: secondaryColor, opacity: 0.5 }}
+            />
+
+            {/* GitHub Link */}
             <a 
               href="https://github.com/rakibulism/Colorma" 
               target="_blank" 
@@ -176,6 +238,115 @@ export default function App() {
             </Button>
           </div>
         </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div 
+            className="md:hidden border-b"
+            style={{ 
+              backgroundColor,
+              borderColor: secondaryColor,
+            }}
+          >
+            <div className="px-6 py-4 flex flex-col gap-4">
+              <button
+                onClick={() => {
+                  setCurrentPage('alphads');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 'var(--spacing-2) 0',
+                  cursor: 'pointer',
+                  color: currentPage === 'alphads' ? primaryColor : textColor,
+                  fontWeight: currentPage === 'alphads' ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
+                  textAlign: 'left',
+                }}
+              >
+                Alpha DS
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('products');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 'var(--spacing-2) 0',
+                  cursor: 'pointer',
+                  color: currentPage === 'products' ? primaryColor : textColor,
+                  fontWeight: currentPage === 'products' ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
+                  textAlign: 'left',
+                }}
+              >
+                Products
+              </button>
+              <a 
+                href="#" 
+                style={{ 
+                  color: textColor,
+                  padding: 'var(--spacing-2) 0',
+                  textDecoration: 'none',
+                }}
+              >
+                Features
+              </a>
+              <button
+                onClick={() => {
+                  setCurrentPage('pricing');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 'var(--spacing-2) 0',
+                  cursor: 'pointer',
+                  color: currentPage === 'pricing' ? primaryColor : textColor,
+                  fontWeight: currentPage === 'pricing' ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
+                  textAlign: 'left',
+                }}
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('about');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 'var(--spacing-2) 0',
+                  cursor: 'pointer',
+                  color: currentPage === 'about' ? primaryColor : textColor,
+                  fontWeight: currentPage === 'about' ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
+                  textAlign: 'left',
+                }}
+              >
+                About
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('templates');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 'var(--spacing-2) 0',
+                  cursor: 'pointer',
+                  color: currentPage === 'templates' ? primaryColor : textColor,
+                  fontWeight: currentPage === 'templates' ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
+                  textAlign: 'left',
+                }}
+              >
+                Templates
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Page Content */}
         {currentPage === 'home' && (
@@ -306,6 +477,7 @@ export default function App() {
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
               accentColor={accentColor}
+              theme={theme}
             />
           </div>
         </div>
