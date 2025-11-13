@@ -4,6 +4,7 @@ import { Github } from 'lucide-react';
 import { MinimalColorPicker } from './components/MinimalColorPicker';
 import { MinimalContrastInfo } from './components/MinimalContrastInfo';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { ColorExporter } from './components/ColorExporter';
 import { HomePage } from './components/HomePage';
 import { AlphaDSPage } from './components/AlphaDSPage';
 import { ProductsPage } from './components/ProductsPage';
@@ -134,7 +135,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <a 
-              href="https://github.com/yourusername/your-repo" 
+              href="https://github.com/rakibulism/Colorma" 
               target="_blank" 
               rel="noopener noreferrer"
               style={{ 
@@ -256,14 +257,28 @@ export default function App() {
           </div>
 
           {/* Randomize Button */}
-          <Button
-            onClick={handleRandomize}
-            size="sm"
-            className="gap-2 border-0 whitespace-nowrap"
-            style={{ backgroundColor: accentColor, color: backgroundColor }}
-          >
-            Randomize
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleRandomize}
+              size="sm"
+              className="gap-2 border-0 whitespace-nowrap"
+              style={{ backgroundColor: accentColor, color: backgroundColor }}
+            >
+              Randomize
+            </Button>
+            
+            {/* Divider */}
+            <div className="w-px h-6" style={{ backgroundColor: 'var(--border)' }} />
+            
+            {/* Export Button */}
+            <ColorExporter
+              textColor={textColor}
+              backgroundColor={backgroundColor}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+            />
+          </div>
         </div>
       </div>
     </div>
