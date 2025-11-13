@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './components/ui/button';
+import { Github } from 'lucide-react';
 import { MinimalColorPicker } from './components/MinimalColorPicker';
 import { MinimalContrastInfo } from './components/MinimalContrastInfo';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
@@ -132,6 +133,22 @@ export default function App() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <a 
+              href="https://github.com/yourusername/your-repo" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                color: textColor,
+                opacity: 0.8,
+                transition: 'opacity 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+            >
+              <Github className="w-5 h-5" />
+            </a>
             <Button
               size="sm"
               className="border-0"
