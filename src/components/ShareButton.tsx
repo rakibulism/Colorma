@@ -80,17 +80,17 @@ export function ShareButton({
         <Button
           size="sm"
           variant="outline"
-          className="gap-2 border-0 whitespace-nowrap"
+          className="border-0"
           style={{
             borderWidth: '1px',
             borderStyle: 'solid',
             borderColor: 'var(--border)',
             backgroundColor: 'var(--card)',
             color: 'var(--foreground)',
+            padding: 'var(--spacing-2)',
           }}
         >
           <Share2 className="w-4 h-4" />
-          Share
         </Button>
       </DialogTrigger>
       <DialogContent
