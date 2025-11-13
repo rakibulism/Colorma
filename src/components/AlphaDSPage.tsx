@@ -232,6 +232,9 @@ export function AlphaDSPage({ textColor, backgroundColor, primaryColor, secondar
                       <DialogContent style={{ backgroundColor, borderColor: secondaryColor }}>
                         <DialogHeader>
                           <DialogTitle style={{ color: textColor }}>Select Date</DialogTitle>
+                          <DialogDescription style={{ color: textColor, opacity: 0.8 }}>
+                            Choose a date from the calendar below
+                          </DialogDescription>
                         </DialogHeader>
                         <Calendar
                           mode="single"
@@ -482,7 +485,7 @@ export function AlphaDSPage({ textColor, backgroundColor, primaryColor, secondar
               const Icon = feature.icon;
               return (
                 <Card key={index} className="transition-all hover:shadow-lg" style={{ backgroundColor, borderColor: secondaryColor }}>
-                  <CardHeader>
+                  <CardHeader className="p-[24px]">
                     <div
                       className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
                       style={{ backgroundColor: accentColor, borderRadius: '50%' }}
