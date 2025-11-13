@@ -5,6 +5,7 @@ import { MinimalColorPicker } from './components/MinimalColorPicker';
 import { MinimalContrastInfo } from './components/MinimalContrastInfo';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { ColorExporter } from './components/ColorExporter';
+import { ShareButton } from './components/ShareButton';
 import { HomePage } from './components/HomePage';
 import { AlphaDSPage } from './components/AlphaDSPage';
 import { ProductsPage } from './components/ProductsPage';
@@ -24,6 +25,22 @@ export default function App() {
   const [secondaryColor, setSecondaryColor] = useState('#DEDCFF');
   const [accentColor, setAccentColor] = useState('#433BFF');
   const [currentPage, setCurrentPage] = useState<PageType>('home');
+
+  // Load colors from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlTextColor = params.get('text');
+    const urlBackgroundColor = params.get('bg');
+    const urlPrimaryColor = params.get('primary');
+    const urlSecondaryColor = params.get('secondary');
+    const urlAccentColor = params.get('accent');
+
+    if (urlTextColor) setTextColor(urlTextColor);
+    if (urlBackgroundColor) setBackgroundColor(urlBackgroundColor);
+    if (urlPrimaryColor) setPrimaryColor(urlPrimaryColor);
+    if (urlSecondaryColor) setSecondaryColor(urlSecondaryColor);
+    if (urlAccentColor) setAccentColor(urlAccentColor);
+  }, []);
 
   // Update colors when theme changes - adapt existing colors instead of randomizing
   useEffect(() => {
@@ -272,6 +289,18 @@ export default function App() {
             
             {/* Export Button */}
             <ColorExporter
+              textColor={textColor}
+              backgroundColor={backgroundColor}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+            />
+            
+            {/* Divider */}
+            <div className="w-px h-6" style={{ backgroundColor: 'var(--border)' }} />
+            
+            {/* Share Button */}
+            <ShareButton
               textColor={textColor}
               backgroundColor={backgroundColor}
               primaryColor={primaryColor}
