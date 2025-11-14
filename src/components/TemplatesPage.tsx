@@ -5,6 +5,7 @@ import { Search, ChevronRight, Command, Filter, X } from 'lucide-react';
 import { Badge } from './ui/badge';
 import exampleImage from 'figma:asset/d86249799e24733340f94f65a56d585f68e01625.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ArtistDiscoveryTemplate } from './templates/ArtistDiscoveryTemplate';
 
 interface TemplatesPageProps {
   textColor: string;
@@ -307,6 +308,60 @@ export function TemplatesPage({
 
         {/* Content */}
         <div className="px-8 py-8 max-w-4xl">
+          {/* Show Artist Discovery Template when Landing Pages is active */}
+          {activeItem === 'Landing Pages' ? (
+            <div>
+              <div className="mb-8">
+                <Badge
+                  className="mb-4"
+                  style={{
+                    backgroundColor: accentColor,
+                    color: backgroundColor,
+                    fontSize: 'var(--font-size-xs)',
+                  }}
+                >
+                  Landing Page Templates
+                </Badge>
+                <h1 className="mb-4" style={{ color: textColor }}>
+                  Artist Discovery Platform
+                </h1>
+                <p style={{ color: textColor, opacity: 0.7, fontSize: 'var(--font-size-base)' }}>
+                  A modern landing page for a music artist discovery platform. Features a bold hero section, feature cards, and clean typography. All elements update with your selected colors in real-time.
+                </p>
+              </div>
+
+              {/* Template Preview */}
+              <div 
+                className="mb-8 rounded-lg overflow-hidden border"
+                style={{ borderColor: secondaryColor }}
+              >
+                <ArtistDiscoveryTemplate
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor}
+                  accentColor={accentColor}
+                  textColor={textColor}
+                  backgroundColor={backgroundColor}
+                />
+              </div>
+
+              {/* Back Button */}
+              <Button
+                onClick={() => setActiveItem('Welcome')}
+                variant="outline"
+                className="border-0"
+                style={{
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: secondaryColor,
+                  color: textColor,
+                  backgroundColor,
+                }}
+              >
+                ← Back to Templates
+              </Button>
+            </div>
+          ) : (
+            <>
           {/* Page Title */}
           <div className="mb-8">
             <Badge
@@ -664,6 +719,8 @@ export function TemplatesPage({
               </p>
             </div>
           </div>
+            </>
+          )}
         </div>
       </main>
     </div>

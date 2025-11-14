@@ -54,6 +54,7 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --color-gray-100: oklch(.967 .003 264.542);
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
@@ -82,6 +83,8 @@
     --tracking-widest: .1em;
     --radius-xs: .125rem;
     --radius-sm: calc(var(--radius)  - 2px);
+    --radius-xl: calc(var(--radius-card)  + 4px);
+    --radius-2xl: 1rem;
     --default-transition-duration: .15s;
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-sans);
@@ -703,11 +706,6 @@
     height: calc(var(--spacing) * 9);
   }
 
-  .size-full {
-    width: 100%;
-    height: 100%;
-  }
-
   .h-1\.5 {
     height: calc(var(--spacing) * 1.5);
   }
@@ -1243,6 +1241,10 @@
     background-color: var(--destructive);
   }
 
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
+  }
+
   .bg-input-background {
     background-color: var(--input-background);
   }
@@ -1439,6 +1441,10 @@
 
   .text-right {
     text-align: right;
+  }
+
+  .align-middle {
+    vertical-align: middle;
   }
 
   .text-base {

@@ -13,10 +13,11 @@ import { ProductsPage } from './components/ProductsPage';
 import { PricingPage } from './components/PricingPage';
 import { AboutPage } from './components/AboutPage';
 import { TemplatesPage } from './components/TemplatesPage';
+import { DevRuler } from './components/DevRuler';
 import { generateAccessiblePalette, adaptColorsToTheme } from './utils/colorUtils';
 import { useTheme } from './hooks/useTheme';
-import FigmaIcon from './imports/Group3-17-2430';
-import { toast } from 'sonner';
+import { FigmaIcon } from './components/icons/FigmaIcon';
+import { toast } from 'sonner@2.0.3';
 
 type PageType = 'home' | 'alphads' | 'products' | 'pricing' | 'about' | 'templates';
 
@@ -29,6 +30,7 @@ export default function App() {
   const [accentColor, setAccentColor] = useState('#433BFF');
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [designModeEnabled, setDesignModeEnabled] = useState(false);
 
   // Load colors from URL on mount
   useEffect(() => {
@@ -86,10 +88,19 @@ export default function App() {
       description: 'Use Figma\'s "Copy as SVG" or screenshot tools to capture the design.',
       duration: 4000,
     });
+    setDesignModeEnabled(true);
   };
 
   return (
     <div className="min-h-screen relative pb-24" style={{ backgroundColor, color: textColor }}>
+      {/* Dev Ruler Overlay for Design Mode */}
+      <DevRuler 
+        enabled={designModeEnabled} 
+        accentColor={accentColor}
+        textColor={textColor}
+        backgroundColor={backgroundColor}
+      />
+
       {/* Preview Website */}
       <div className="max-w-7xl mx-auto">
         {/* Navigation */}
@@ -181,19 +192,27 @@ export default function App() {
                 <TooltipTrigger asChild>
                   <button
                     style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
+                      background: designModeEnabled ? `${accentColor}20` : 'none',
+                      border: designModeEnabled ? `1px solid ${accentColor}` : 'none',
+                      padding: designModeEnabled ? 'var(--spacing-1)' : 0,
+                      borderRadius: 'var(--radius-sm)',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      opacity: 0.8,
-                      transition: 'opacity 0.2s',
-                      color: textColor,
+                      opacity: designModeEnabled ? 1 : 0.8,
+                      transition: 'all 0.2s',
+                      color: designModeEnabled ? accentColor : textColor,
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-                    onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
-                    onClick={handleCopyToFigma}
+                    onMouseEnter={(e) => !designModeEnabled && (e.currentTarget.style.opacity = '1')}
+                    onMouseLeave={(e) => !designModeEnabled && (e.currentTarget.style.opacity = '0.8')}
+                    onClick={() => {
+                      if (designModeEnabled) {
+                        setDesignModeEnabled(false);
+                        toast.info('Design mode disabled');
+                      } else {
+                        handleCopyToFigma();
+                      }
+                    }}
                   >
                     <div className="w-5 h-5">
                       <FigmaIcon />
@@ -201,7 +220,7 @@ export default function App() {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Enable "design mode" to copy to Figma</p>
+                  <p>{designModeEnabled ? 'Disable design mode' : 'Enable "design mode" to copy to Figma'}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
