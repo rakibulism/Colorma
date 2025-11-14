@@ -30,6 +30,7 @@ export function TemplatesPage({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeItem, setActiveItem] = useState('Welcome');
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     'Get Started': true,
@@ -312,8 +313,73 @@ export function TemplatesPage({
 
         {/* Content */}
         <div className="px-8 py-8 max-w-4xl">
-          {/* Show Landing Page Templates Gallery when Landing Pages is active */}
-          {activeItem === 'Landing Pages' ? (
+          {/* Show Artist Discovery Template when selected */}
+          {selectedTemplate === 'Artist Discovery Platform' ? (
+            <div>
+              <div className="mb-8">
+                <Badge
+                  className="mb-4"
+                  style={{
+                    backgroundColor: accentColor,
+                    color: backgroundColor,
+                    fontFamily: 'var(--font-family-geist)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-weight-medium)',
+                  }}
+                >
+                  Landing Page Template
+                </Badge>
+                <h1 className="mb-4" style={{ color: textColor }}>
+                  Artist Discovery Platform
+                </h1>
+                <p style={{ 
+                  color: textColor, 
+                  opacity: 0.7, 
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-base)',
+                }}>
+                  A modern landing page for a music artist discovery platform. Features a bold hero section, feature cards, and clean typography. All elements update with your selected colors in real-time.
+                </p>
+              </div>
+
+              {/* Template Preview */}
+              <div 
+                className="mb-8 rounded-lg overflow-hidden border"
+                style={{ 
+                  borderColor: secondaryColor,
+                  borderRadius: 'var(--radius-card)',
+                }}
+              >
+                <ArtistDiscoveryTemplate
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor}
+                  accentColor={accentColor}
+                  textColor={textColor}
+                  backgroundColor={backgroundColor}
+                />
+              </div>
+
+              {/* Back Button */}
+              <Button
+                onClick={() => setSelectedTemplate(null)}
+                variant="outline"
+                className="border-0"
+                style={{
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: secondaryColor,
+                  color: textColor,
+                  backgroundColor,
+                  borderRadius: 'var(--radius-button)',
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-base)',
+                  fontWeight: 'var(--font-weight-medium)',
+                }}
+              >
+                ← Back to Templates
+              </Button>
+            </div>
+          ) : activeItem === 'Landing Pages' ? (
             <div>
               <div className="mb-8">
                 <Badge
@@ -503,6 +569,7 @@ export function TemplatesPage({
                         <Button
                           size="sm"
                           disabled={template.status !== 'Available'}
+                          onClick={() => template.status === 'Available' && setSelectedTemplate(template.title)}
                           style={{
                             backgroundColor: template.status === 'Available' ? primaryColor : secondaryColor,
                             color: template.status === 'Available' ? backgroundColor : textColor,
