@@ -122,13 +122,17 @@ export function TemplatesPage({
                     <li key={item}>
                       <button
                         onClick={() => setActiveItem(item)}
-                        className="w-full text-left px-3 py-1.5 rounded transition-colors"
+                        className="w-full text-left transition-colors"
                         style={{
                           background: activeItem === item ? secondaryColor : 'transparent',
                           border: 'none',
                           cursor: 'pointer',
                           color: activeItem === item ? primaryColor : textColor,
-                          fontSize: 'var(--font-size-sm)',
+                          padding: '6px 12px',
+                          borderRadius: 'var(--radius-button)',
+                          fontFamily: 'var(--font-family-geist)',
+                          fontSize: 'var(--text-xs)',
+                          fontWeight: 'var(--font-weight-medium)',
                         }}
                       >
                         {item}
@@ -308,7 +312,7 @@ export function TemplatesPage({
 
         {/* Content */}
         <div className="px-8 py-8 max-w-4xl">
-          {/* Show Artist Discovery Template when Landing Pages is active */}
+          {/* Show Landing Page Templates Gallery when Landing Pages is active */}
           {activeItem === 'Landing Pages' ? (
             <div>
               <div className="mb-8">
@@ -317,31 +321,236 @@ export function TemplatesPage({
                   style={{
                     backgroundColor: accentColor,
                     color: backgroundColor,
-                    fontSize: 'var(--font-size-xs)',
+                    fontFamily: 'var(--font-family-geist)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-weight-medium)',
                   }}
                 >
                   Landing Page Templates
                 </Badge>
                 <h1 className="mb-4" style={{ color: textColor }}>
-                  Artist Discovery Platform
+                  Landing Page Collection
                 </h1>
-                <p style={{ color: textColor, opacity: 0.7, fontSize: 'var(--font-size-base)' }}>
-                  A modern landing page for a music artist discovery platform. Features a bold hero section, feature cards, and clean typography. All elements update with your selected colors in real-time.
+                <p style={{ 
+                  color: textColor, 
+                  opacity: 0.7, 
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-base)',
+                }}>
+                  Browse our collection of landing page templates. Each template is fully responsive and updates with your selected colors in real-time.
                 </p>
               </div>
 
-              {/* Template Preview */}
-              <div 
-                className="mb-8 rounded-lg overflow-hidden border"
-                style={{ borderColor: secondaryColor }}
+              {/* Template Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {[
+                  {
+                    title: 'Artist Discovery Platform',
+                    category: 'Music & Entertainment',
+                    description: 'Modern music platform with bold hero section, featured artists, and discovery features',
+                    tags: ['Hero', 'Cards', 'Modern'],
+                    status: 'Available',
+                  },
+                  {
+                    title: 'SaaS Product Launch',
+                    category: 'Software & Tech',
+                    description: 'Clean product landing page with feature highlights, pricing, and customer testimonials',
+                    tags: ['Minimal', 'B2B', 'Pricing'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'Fintech App Landing',
+                    category: 'Finance & Banking',
+                    description: 'Professional financial services page with trust indicators and security features',
+                    tags: ['Professional', 'Security', 'Trust'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'E-commerce Store',
+                    category: 'Retail & Shopping',
+                    description: 'Product showcase landing with shopping features, categories, and promotional sections',
+                    tags: ['Shopping', 'Products', 'Commerce'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'Mobile App Launch',
+                    category: 'Mobile & Apps',
+                    description: 'App marketing page with download buttons, feature previews, and app store badges',
+                    tags: ['Mobile', 'Downloads', 'Features'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'Agency Portfolio',
+                    category: 'Creative & Agency',
+                    description: 'Creative agency showcase with project grid, team section, and contact form',
+                    tags: ['Portfolio', 'Projects', 'Creative'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'Event Landing Page',
+                    category: 'Events & Conferences',
+                    description: 'Event promotion page with schedule, speakers, venue details, and registration',
+                    tags: ['Events', 'Schedule', 'Registration'],
+                    status: 'Coming Soon',
+                  },
+                  {
+                    title: 'Startup Launch',
+                    category: 'Startup & Business',
+                    description: 'Bold startup landing with problem-solution approach, team intro, and investor section',
+                    tags: ['Startup', 'Bold', 'Innovation'],
+                    status: 'Coming Soon',
+                  },
+                ].map((template, index) => (
+                  <div
+                    key={index}
+                    className="border overflow-hidden transition-all hover:shadow-md"
+                    style={{
+                      borderRadius: 'var(--radius-card)',
+                      borderColor: secondaryColor,
+                      backgroundColor,
+                    }}
+                  >
+                    {/* Template Preview Thumbnail */}
+                    <div
+                      className="aspect-video w-full flex items-center justify-center"
+                      style={{
+                        background: `linear-gradient(135deg, ${secondaryColor} 0%, ${backgroundColor} 100%)`,
+                        borderBottom: `1px solid ${secondaryColor}`,
+                      }}
+                    >
+                      <div style={{ 
+                        color: textColor, 
+                        opacity: 0.3,
+                        fontFamily: 'var(--font-family-geist)',
+                        fontSize: 'var(--text-lg)',
+                        fontWeight: 'var(--font-weight-medium)',
+                      }}>
+                        Preview
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div style={{ padding: '20px' }}>
+                      {/* Category Badge */}
+                      <div className="mb-2">
+                        <span style={{
+                          fontFamily: 'var(--font-family-geist)',
+                          fontSize: 'var(--text-xs)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          color: textColor,
+                          opacity: 0.6,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}>
+                          {template.category}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 style={{ 
+                        color: textColor,
+                        marginBottom: '8px',
+                        fontFamily: 'var(--font-family-geist)',
+                        fontSize: 'var(--text-lg)',
+                        fontWeight: 'var(--font-weight-semibold)',
+                      }}>
+                        {template.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p style={{ 
+                        color: textColor, 
+                        opacity: 0.7,
+                        marginBottom: '16px',
+                        fontFamily: 'var(--font-family-geist)',
+                        fontSize: 'var(--text-xs)',
+                        lineHeight: '1.5',
+                      }}>
+                        {template.description}
+                      </p>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {template.tags.map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: 'var(--radius)',
+                              backgroundColor: secondaryColor,
+                              color: textColor,
+                              fontFamily: 'var(--font-family-geist)',
+                              fontSize: 'var(--text-xs)',
+                              opacity: 0.8,
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center justify-between">
+                        <span style={{
+                          fontFamily: 'var(--font-family-geist)',
+                          fontSize: 'var(--text-xs)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          color: template.status === 'Available' ? accentColor : textColor,
+                          opacity: template.status === 'Available' ? 1 : 0.5,
+                        }}>
+                          {template.status}
+                        </span>
+                        <Button
+                          size="sm"
+                          disabled={template.status !== 'Available'}
+                          style={{
+                            backgroundColor: template.status === 'Available' ? primaryColor : secondaryColor,
+                            color: template.status === 'Available' ? backgroundColor : textColor,
+                            border: 'none',
+                            opacity: template.status === 'Available' ? 1 : 0.5,
+                            cursor: template.status === 'Available' ? 'pointer' : 'not-allowed',
+                            borderRadius: 'var(--radius-button)',
+                            fontFamily: 'var(--font-family-geist)',
+                            fontSize: 'var(--text-xs)',
+                            fontWeight: 'var(--font-weight-medium)',
+                            padding: '6px 16px',
+                          }}
+                        >
+                          {template.status === 'Available' ? 'Preview' : 'Coming Soon'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Info Section */}
+              <div
+                className="border p-6 mb-6"
+                style={{
+                  borderRadius: 'var(--radius-card)',
+                  borderColor: secondaryColor,
+                  backgroundColor: secondaryColor,
+                }}
               >
-                <ArtistDiscoveryTemplate
-                  primaryColor={primaryColor}
-                  secondaryColor={secondaryColor}
-                  accentColor={accentColor}
-                  textColor={textColor}
-                  backgroundColor={backgroundColor}
-                />
+                <h3 style={{ 
+                  color: textColor,
+                  marginBottom: '12px',
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-weight-semibold)',
+                }}>
+                  More Templates Coming Soon
+                </h3>
+                <p style={{ 
+                  color: textColor, 
+                  opacity: 0.7,
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-base)',
+                  lineHeight: '1.5',
+                }}>
+                  We're actively building more landing page templates across different industries. Each template will be fully responsive and customizable with your color palette. Check back soon for updates!
+                </p>
               </div>
 
               {/* Back Button */}
@@ -355,6 +564,10 @@ export function TemplatesPage({
                   borderColor: secondaryColor,
                   color: textColor,
                   backgroundColor,
+                  borderRadius: 'var(--radius-button)',
+                  fontFamily: 'var(--font-family-geist)',
+                  fontSize: 'var(--text-base)',
+                  fontWeight: 'var(--font-weight-medium)',
                 }}
               >
                 ← Back to Templates
