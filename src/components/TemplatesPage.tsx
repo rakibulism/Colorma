@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Search, ChevronRight, Command, Filter, X } from 'lucide-react';
+import { Search, ChevronRight, Command, Filter, X, ArrowUp, ArrowLeft } from 'lucide-react';
 import { Badge } from './ui/badge';
 import exampleImage from 'figma:asset/d86249799e24733340f94f65a56d585f68e01625.png';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -32,6 +32,7 @@ export function TemplatesPage({
   const [activeItem, setActiveItem] = useState('Welcome');
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     'Get Started': true,
     'Color Tools': true,
@@ -79,6 +80,36 @@ export function TemplatesPage({
       ...prev,
       [section]: !prev[section],
     }));
+  };
+
+  // Reset selected template when active item changes
+  useEffect(() => {
+    setSelectedTemplate(null);
+  }, [activeItem]);
+
+  // Handle scroll to show/hide scroll-to-top button
+  useEffect(() => {
+    const mainContent = document.querySelector('main');
+    
+    const handleScroll = () => {
+      if (mainContent && mainContent.scrollTop > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    if (mainContent) {
+      mainContent.addEventListener('scroll', handleScroll);
+      return () => mainContent.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  const scrollToTop = () => {
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+      mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -734,27 +765,45 @@ export function TemplatesPage({
                   count: '4 templates',
                 },
               ].map((category, index) => (
-                <div
+                <button
                   key={index}
-                  className="border rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => setActiveItem(category.title)}
+                  className="border rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer text-left w-full"
                   style={{
                     borderColor: secondaryColor,
                     backgroundColor,
+                    borderRadius: 'var(--radius-card)',
                   }}
                 >
                   <div className="mb-3" style={{ fontSize: 'var(--font-size-2xl)' }}>
                     {category.icon}
                   </div>
-                  <h3 className="mb-2" style={{ color: textColor, marginBottom: 0 }}>
+                  <h3 className="mb-2" style={{ 
+                    color: textColor, 
+                    marginBottom: 0,
+                    fontFamily: 'var(--font-family-geist)',
+                    fontSize: 'var(--text-lg)',
+                    fontWeight: 'var(--font-weight-semibold)',
+                  }}>
                     {category.title}
                   </h3>
-                  <p className="mb-3" style={{ color: textColor, opacity: 0.7, fontSize: 'var(--font-size-sm)' }}>
+                  <p className="mb-3" style={{ 
+                    color: textColor, 
+                    opacity: 0.7, 
+                    fontFamily: 'var(--font-family-geist)',
+                    fontSize: 'var(--text-xs)',
+                  }}>
                     {category.description}
                   </p>
-                  <p style={{ color: primaryColor, fontSize: 'var(--font-size-xs)' }}>
+                  <p style={{ 
+                    color: primaryColor, 
+                    fontFamily: 'var(--font-family-geist)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-weight-medium)',
+                  }}>
                     {category.count}
                   </p>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -1003,6 +1052,50 @@ export function TemplatesPage({
           )}
         </div>
       </main>
+
+      {/* Sticky Back Button - Only show when viewing Landing Pages or a template */}
+      {(activeItem === 'Landing Pages' || selectedTemplate) && (
+        <button
+          className="fixed bottom-16 left-4 md:left-64 z-50 flex items-center gap-2 px-4 py-3 rounded-full shadow-lg transition-all hover:scale-105"
+          onClick={() => {
+            if (selectedTemplate) {
+              setSelectedTemplate(null);
+            } else {
+              setActiveItem('Welcome');
+            }
+          }}
+          style={{
+            backgroundColor: `rgba(${parseInt(secondaryColor.slice(1, 3), 16)}, ${parseInt(secondaryColor.slice(3, 5), 16)}, ${parseInt(secondaryColor.slice(5, 7), 16)}, 0.8)`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid rgba(${parseInt(textColor.slice(1, 3), 16)}, ${parseInt(textColor.slice(3, 5), 16)}, ${parseInt(textColor.slice(5, 7), 16)}, 0.1)`,
+            color: textColor,
+            fontFamily: 'var(--font-family-geist)',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--font-weight-medium)',
+          }}
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back</span>
+        </button>
+      )}
+
+      {/* Scroll to Top Button with Glassmorphism */}
+      {showScrollTop && (
+        <button
+          className="fixed bottom-16 right-4 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105"
+          onClick={scrollToTop}
+          style={{
+            backgroundColor: `rgba(${parseInt(accentColor.slice(1, 3), 16)}, ${parseInt(accentColor.slice(3, 5), 16)}, ${parseInt(accentColor.slice(5, 7), 16)}, 0.8)`,
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `1px solid rgba(255, 255, 255, 0.2)`,
+            color: backgroundColor,
+          }}
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </div>
   );
 }

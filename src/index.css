@@ -46,6 +46,9 @@
       --tw-drop-shadow-alpha: 100%;
       --tw-drop-shadow-size: initial;
       --tw-duration: initial;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
     }
   }
 }
@@ -512,6 +515,10 @@
     bottom: calc(var(--spacing) * 0);
   }
 
+  .bottom-16 {
+    bottom: calc(var(--spacing) * 16);
+  }
+
   .bottom-24 {
     bottom: calc(var(--spacing) * 24);
   }
@@ -530,6 +537,10 @@
 
   .left-3 {
     left: calc(var(--spacing) * 3);
+  }
+
+  .left-4 {
+    left: calc(var(--spacing) * 4);
   }
 
   .left-\[50\%\] {
@@ -1625,6 +1636,11 @@
     outline-width: 1px;
   }
 
+  .blur {
+    --tw-blur: blur(8px);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
   .invert {
     --tw-invert: invert(100%);
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
@@ -1744,6 +1760,15 @@
 
   .focus-within\:z-20:focus-within {
     z-index: 20;
+  }
+
+  @media (hover: hover) {
+    .hover\:scale-105:hover {
+      --tw-scale-x: 105%;
+      --tw-scale-y: 105%;
+      --tw-scale-z: 105%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
   }
 
   @media (hover: hover) {
@@ -2180,6 +2205,12 @@
   @media (width >= 40rem) {
     .sm\:text-left {
       text-align: left;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .md\:left-64 {
+      left: calc(var(--spacing) * 64);
     }
   }
 
@@ -2807,6 +2838,24 @@ html {
 @property --tw-duration {
   syntax: "*";
   inherits: false
+}
+
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
 }
 
 @keyframes enter {
